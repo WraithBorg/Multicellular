@@ -1,0 +1,52 @@
+server:
+  port: 8030
+spring:
+  application:
+    name: product-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.27.25:8848
+    sentinel:
+      transport:
+        dashboard: 192.168.27.25:8038
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.27.25:3306/ac_mall_cloud_product_service_db?serverTimezone=GMT%2B8
+    username: dashabi
+    password: jiweiliu
+    hikari:
+      pool-name: YH_HikariCP
+      minimum-idle: 10 #最小空闲连接数量
+      idle-timeout: 600000 #空闲连接存活最大时间，默认600000（10分钟）
+      maximum-pool-size: 100 #连接池最大连接数，默认是10
+      auto-commit: true  #此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      max-lifetime: 1800000 #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      connection-timeout: 30000 #数据库连接超时时间,默认30秒，即30000
+      connection-test-query: SELECT 1
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+seata:
+  enabled: true
+  application-id: product-service # 同spring.application.name 配置的项目名称
+  tx-service-group: my_test_tx_group
+  enable-auto-data-source-proxy: true    #开启数据库代理
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      server-addr: 192.168.27.25:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 192.168.27.25:8848
+      namespace: public
+      username: nacos
+      password: nacos
